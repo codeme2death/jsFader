@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+        <script src="./jsFader.js"></script>
+        <script>
+            function stop() {
+                el = document.getElementById('commentSlider');
+                el.jsFader.stopAnimation();
+            }
+            function start() {
+                el = document.getElementById('commentSlider');
+                el.jsFader.startAnimation();
+            }  
+            function updateImage(number) {
+                el = document.getElementById('commentSlider');
+                el.jsFader.setPosition(number);
+            }        
+            function next() {
+                el = document.getElementById('commentSlider');
+                el.jsFader.next();
+            }        
+            function previous() {
+                el = document.getElementById('commentSlider');
+                el.jsFader.previous();
+            }            
+
+        </script>    
+        <style>
+            #commentSlider {
+                overflow:hidden;
+                height:100px;
+                font-size:26px;
+                height:100px;
+            }
+            #commentSlider li {
+                list-style-type: none;
+                opacity:0;
+                visibility:hidden;
+                position:absolute;
+            }
+        </style>
+  </head>
+  <body>
+
+<a href="#" onClick="stop();">Stop</a> ~ 
+<a href="#" onClick="start();">Start</a> ~
+<a href="#" onClick="previous();">Previous</a> ~
+<a href="#" onClick="next();">Next</a> ~
+<label for="elementNumber">Jump To Number </label>
+<input type="text" onChange="updateImage(this.value)" id="elementNumber"/>
+    <div >
+        <ul id="commentSlider" class="jsFader{timer:'1500'}">
+            <li>Hello</li>
+            <li>Welcome</li>
+            <li>To</li>
+            <li>JSdraw</li>
+            <li>You</li>
+            <li>can</li>
+            <li>add</li>
+            <li>anything</li>
+            <li>between</li>
+            <li>these</li>
+            <li>tags</li>
+            <li>like</li>
+            <li>a</li>
+            <li>image</li>
+            <li>
+                <img src="./back1.png" width="400"/>
+            </li>
+        </ul>
+    </div>
+
+  </body>
+</html> 
