@@ -322,8 +322,8 @@ var jsFader = {
         start : function(element,props) {   
             var browser = jsFader.getBrowser();
             var browserVersion = jsFader.getBrowserVersion();
-
-            if(browser.toLowerCase() === 'msie') {
+            alert(browser);
+            if(browser.toLowerCase() === 'msie' || browser.toLowerCase() === 'safari') {
                 if(browserVersion < 10 ) {
                     jsFader.runSetTimer = true;
                 }
