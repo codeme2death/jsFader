@@ -14,52 +14,74 @@
 * By default the time out is 5 seconds and hard coded to not go below a second. 
 * currently multi list fades are not supported. I will work on that later.
 * It should automatically detect IE 10 and down and set runSetTimer to true so that it will use the 
+* variables
+        parentType ~ the main wrapper for the elements. default is a list item but div's, span's or dsomthing else could be used
+        childElement  ~ The child element type that will fade. It has to be directly after the parent element. no nested divs or list items.
+*       counter ~ main counter for elements
+        elements ~ list of elements 
+        fadeOut ~ holds the time out for the fade out
+        fadeIn ~ holds the time out for the fade out 
+        timeOut ~ initial timeout if none is given
+        fadeInTime  ~ sets the fade out time through parameters. Default takes the time out time and divides by 1000
+        fadeOutTime ~ sets the fade in time through parameters. Default takes the time out time and divides by 1000
+        fadeBy : ~ sets the amount to fade by. default is 2px but could be increased to add faster fade.
+        className ~ the class Name the search for default is jsFader but could be something else
+        
+        lastTimeRan ~ marks the last time the program ran. used internally
+        lastFadeTimeRan ~ marks the last time the fade ran. used internally
+        isRunning ~ marks whether or not the program is running. set to false to stop execusion
+        isFadeRunning ~ marker to see if fade is running. It prevents happy clickers from clicking to fast and screwing up the animation.
+        currentFadeOut ~ the pixel amount to start the fade at set to lower if you don't want full opacity when it fades out.
+        
+        runSetTimer ~ this sets whether or not the program uses the setTimeout method or requestAnimationFrame for newer browser support
 */ 
 
 
 var jsFader = {
+        parentType : 'ul',
+        childElement : 'li',
         counter : -1,
-        liElements : null,
+        elements : null,
         fadeOut : 0,
         fadeIn: 0 ,
-        element : '',
         timeOut : 5000,
         fadeInTime : 0,
         fadeOutTime : 0,
         fadeBy : 2,
         className : 'jsFader',
-        parentType : 'ul',
         lastTimeRan : '',
         lastFadeTimeRan : '',
         isRunning : true,
         isFadeRunning : false,
         currentFadeOut : 100,
-        childElement : 'li',
-        runSetTimer : true,
-        changeText : function() {
-            if(jsFader.liElements) {
-                var length = jsFader.liElements.length;
-                
-                if(jsFader.counter >= length) {
-                    jsFader.counter = 0;
-                }
-                if(jsFader.liElements[jsFader.counter]) {   
-                    jsFader.fadeOutAnimation(jsFader.currentFadeOut,jsFader.liElements[jsFader.counter]);
-                }                            
-                jsFader.counter++;
-                if(jsFader.liElements[jsFader.counter]) {            
-                    jsFader.fadeInAnimation(0,jsFader.liElements[jsFader.counter]);                
-                } else {               
-                    jsFader.fadeInAnimation(0,jsFader.liElements[0]);
+        runSetTimer : false,
+        changeElement : function() {
+            if(jsFader.elements) {
+                if(jsFader.isRunning === true) {
+                    var length = jsFader.elements.length;
+
+                    if(jsFader.counter >= length) {
+                        jsFader.counter = 0;
+                    }
+                    if(jsFader.elements[jsFader.counter]) {   
+                        jsFader.fadeOutAnimation(jsFader.currentFadeOut,jsFader.elements[jsFader.counter]);
+                    }                            
+                    jsFader.counter++;
+                    if(jsFader.elements[jsFader.counter]) {            
+                        jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                
+                    } else {               
+                        jsFader.fadeInAnimation(0,jsFader.elements[0]);
+                    }
                 }
             }
             jsFader.lastTimeRan = new Date().getTime(); 
         },
         fireAnimationChange : function() {
+            //uses the requestAnimationFrame for newer browsers
             currenTime = new Date().getTime();
             difference = currenTime - jsFader.lastTimeRan;
             if(difference >= jsFader.timeOut) {
-                jsFader.changeText();
+                jsFader.changeElement();
             }
             if(jsFader.isRunning === true) {
                 jsFader.timer = window.requestAnimationFrame(jsFader.fireAnimationChange);
@@ -68,7 +90,8 @@ var jsFader = {
             }
         },
         fireTimerChange : function() {
-            jsFader.changeText();
+            //uses the setTimeout for older browsers
+            jsFader.changeElement();
             if(jsFader.isRunning === true) {
                 setTimeout(function(){
                     jsFader.fireTimerChange();
@@ -151,6 +174,7 @@ var jsFader = {
                     }                       
 
                 } else {
+
                     jsFader.isFadeRunning = false;
                     jsFader.lastFadeTimeRan = new Date().getTime();
                     window.clearInterval(jsFader.fadeIn);
@@ -159,8 +183,10 @@ var jsFader = {
         },              
         stopAnimation : function() {
             jsFader.isRunning = false;
-            
-            //window.requestAnimationFrame(jsFader.fireAnimationChange);
+            window.clearInterval(jsFader.fadeOut);
+            jsFader.fadeOut = false;
+            window.clearInterval(jsFader.fadeIn);
+            jsFader.fadeIn = false;            
         },
         startAnimation : function() {
             jsFader.checkList();            
@@ -173,12 +199,19 @@ var jsFader = {
         },        
         checkList : function() {
             //makes sure there are not items showing that are not supposed to.
-            var length = jsFader.liElements.length;
+            var length = jsFader.elements.length;
+            if(jsFader.counter === length) {
+                jsFader.counter = 0;
+            }
+            console.log(jsFader.counter + "," + length);
             for(var i = 0; i < length; ++i) {
-                jsFader.liElements[i].style.opacity = '0';
-                jsFader.liElements[i].style.filter = 'alpha(opacity=0)'; 
-                jsFader.liElements[i].style.visibility = "hidden";
-                jsFader.liElements[i].style.display = "none";                    
+                
+                if(i !== jsFader.counter) {
+                    jsFader.elements[i].style.opacity = '0';
+                    jsFader.elements[i].style.filter = 'alpha(opacity=0)'; 
+                    jsFader.elements[i].style.visibility = "hidden";
+                    jsFader.elements[i].style.display = "none";                    
+                } 
             }
         },
         getList: function(element) {
@@ -198,11 +231,11 @@ var jsFader = {
             return listItems;
         },
         killCurrentFade : function() {
-            if(jsFader.liElements[jsFader.counter]) {
-                jsFader.liElements[jsFader.counter].style.opacity = '-0.02';
-                jsFader.liElements[jsFader.counter].style.filter = 'alpha(opacity=0)'; 
-                jsFader.liElements[jsFader.counter].style.visibility = "hidden";
-                jsFader.liElements[jsFader.counter].style.display = "none";          
+            if(jsFader.elements[jsFader.counter]) {
+                jsFader.elements[jsFader.counter].style.opacity = '-0.02';
+                jsFader.elements[jsFader.counter].style.filter = 'alpha(opacity=0)'; 
+                jsFader.elements[jsFader.counter].style.visibility = "hidden";
+                jsFader.elements[jsFader.counter].style.display = "none";          
             }
         },
         bindByClass : function() {
@@ -228,7 +261,7 @@ var jsFader = {
             }
         },
         setTimer : function(timer) {
-            timer = jsFader.stripChar(timer)
+            timer = jsFader.toNumber(timer)
             if(timer !== '') {
                 if(timer > 0) {
                     if(timer > 100) {
@@ -238,7 +271,7 @@ var jsFader = {
             }
         },
         setFadeInTime : function(timer) {
-            timer = jsFader.stripChar(timer)
+            timer = jsFader.toNumber(timer)
             if(timer > 0) {
                 if(timer <= jsFader.timeOut) {
                     jsFader.fadeInTime = timer;
@@ -246,7 +279,7 @@ var jsFader = {
             }    
         },
         setFadeOutTime : function(timer) {
-            timer = jsFader.stripChar(timer)
+            timer = jsFader.toNumber(timer)
             if(timer > 0) {
                 if(timer <= jsFader.timeOut) {
                    
@@ -292,17 +325,21 @@ var jsFader = {
             return M[1];
         },
         setFadeBy : function(amount) {
-            amount = jsFader.stripChar(amount);
+            amount = jsFader.toNumber(amount);
             if(amount > 0 && isNaN(amount)) {
                 jsFader.fadeBy = amount;
             }    
         },         
-        stripChar : function(stringText) {
+        toNumber : function(stringText) {
             if(stringText !== '') {
                 var pat = new RegExp(/[^0-9]/gi);
                 stringText = stringText.toString();
                 stringText = stringText.replace(pat, "");
             }
+            if(stringText === "") {
+                stringText = "0";
+            }
+            stringText = parseInt(stringText);
             return stringText;
         },
         
@@ -335,8 +372,8 @@ var jsFader = {
                     jsFader.childType = props[key];
                 }                       
             }
-            jsFader.liElements = jsFader.getList(element);
-            if(jsFader.liElements) {
+            jsFader.elements = jsFader.getList(element);
+            if(jsFader.elements) {
                 if(jsFader.runSetTimer=== true) {
                     jsFader.fireTimerChange();
                 } else {
@@ -344,48 +381,89 @@ var jsFader = {
                 }
             }
             this.stopAnimation = function() {
-                if(jsFader.liElements[jsFader.counter]) {
-                    opacity = jsFader.liElements[jsFader.counter].style.opacity;            
-                    jsFader.fadeInAnimation(0,jsFader.liElements[jsFader.counter]);   
-                }
                 jsFader.stopAnimation();
+                jsFader.checkList();
+                
             };
             this.startAnimation = function() {
                 if(jsFader.isRunning === false) {
-                    jsFader.startAnimation();
+                    if(jsFader.isFadeRunning === false) {
+                        jsFader.startAnimation();
+                    }
                 }
             };           
             this.setPosition = function(position) {                
-                var length = jsFader.liElements.length;
-                //position = jsFader.stripChar(position);
-                position = position - 1;
+                var length = jsFader.elements.length;
+                position = jsFader.toNumber(position);
+                if(position === 0) {
+                    position = 1;
+                }
+                position = position -1;
                 if(position >= length) {                    
-                    position = 0;
+                    position = length - 1;
                 }
                 if(position < 0) {
-                    position = length -1;
+                    position = 0;
                 }               
                 
+                //clear running 
                 window.clearInterval(jsFader.fadeOut);
                 jsFader.fadeOut = false;
                 window.clearInterval(jsFader.fadeIn);
                 jsFader.fadeIn = false;
-                jsFader.checkList();
+                
+                
                 jsFader.counter = position;
-                jsFader.fadeInAnimation(0,jsFader.liElements[position]);    
+                jsFader.checkList();
                 jsFader.stopAnimation();
-  
+                                    
+                jsFader.fadeInAnimation(0,jsFader.elements[position]);     
             };
             this.next = function() { 
                 if(jsFader.isFadeRunning === false) {
-                    this.setPosition(jsFader.counter+2);
-                }                
+                    jsFader.counter = jsFader.counter + 1;
+                    var length = jsFader.elements.length;
+                    if(jsFader.counter >= length) {                    
+                        jsFader.counter = 0;
+                    }
+                    if(jsFader.counter < 0) {
+                        jsFader.counter = length -1;
+                    }               
+
+                    //clear running 
+                    window.clearInterval(jsFader.fadeOut);
+                    jsFader.fadeOut = false;
+                    window.clearInterval(jsFader.fadeIn);
+                    jsFader.fadeIn = false;
+
+                    jsFader.checkList();
+                    jsFader.stopAnimation();
+
+                    jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);     
+                } 
                 
             }; 
             this.previous = function() {
                 if(jsFader.isFadeRunning === false) {
+                    jsFader.counter = jsFader.counter - 1;
+                    var length = jsFader.elements.length;
+                    if(jsFader.counter >= length) {                    
+                        jsFader.counter = 0;
+                    }
+                    if(jsFader.counter < 0) {
+                        jsFader.counter = length -1;
+                    }               
+
+                    //clear running 
+                    window.clearInterval(jsFader.fadeOut);
+                    jsFader.fadeOut = false;
+                    window.clearInterval(jsFader.fadeIn);
+                    jsFader.fadeIn = false;
+
                     jsFader.checkList();
-                    this.setPosition(jsFader.counter);
+                    jsFader.stopAnimation();
+
+                    jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                      
                 }
             };             
         } 

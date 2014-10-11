@@ -27,11 +27,42 @@
 
         </script>    
         <style>
+            body {
+                background-color:#ffffe5
+            }
+
+            #mainWrapper {
+                padding:30px;
+                width:978px;
+                margin:0px auto;
+                min-height:900px;
+                background-color: #fff7d1;
+                border:1px solid #000000;
+                border-radius: 10px;
+                
+            }
+            #mainWrapper h1 {
+                text-decoration: underline;
+                
+            }   
+            #mainWrapper #controls a {
+                text-decoration: none;
+            }              
+            #mainWrapper #controls img {
+                cursor:pointer;
+                border:none;
+                
+            }      
+            #mainWrapper p {
+                font-size:22px;
+            }
             #commentSlider {
-                overflow:hidden;
+                position:relative;
                 height:100px;
                 font-size:26px;
                 height:100px;
+                width:200px;
+                float:left
             }
             #commentSlider li {
                 list-style-type: none;
@@ -39,25 +70,91 @@
                 visibility:hidden;
                 position:absolute;
             }
+            #commentSlider2 {
+                overflow:hidden;
+                height:100px;
+                font-size:26px;
+                height:100px;
+                width:200px;
+                float:left;
+            }
+            #commentSlider2 li {
+                list-style-type: none;
+                opacity:0;
+                visibility:hidden;
+                position:absolute;
+            }            
         </style>
   </head>
   <body>
+      <div>
+            <div id="mainWrapper">
+              <div>
+                    <h1><a href="http://www.github.com/codeme2death/jsFader" alt="jsFader" title="JsFader" target="_blank" >JsFader</a></h1>
+                    <p>
+                        This is an example of using jsFader. The best part of this program is that it makes images,text or what ever you want fade into each other. This 
+                        provides a smooth transistion between images or whatever you use. 
+                    </p>
+                    <p>
+                        You can set the time that it fades by and the amount that it fades by. 
+                        It also works on mobile, IE 5 - Edge, Firefox, Safari and Chrome. It should work in all browsers but I only tested the main ones.
+                    </p>
+                    <p>
+                        You can also go to a certain number in the list like number 2 or 4. if you don't enter a number it defaults to the first element. 
+                        If you mix a number in with characters it only gets the numbers and tries to go to that number.<br /><br />
+                        <label for="elementNumber">Jump To Number </label>
+                        <input type="text" onChange="updateImage(this.value)" id="elementNumber"/>
+                    </p>                  
+              </div>
+              <div id="controls">
+              <h3> Controls </h3>
+                <p>
+                    <a href="javascript:void(0)" onclick="stop();">
+                        <img src ="./img/controls/stop.png" alt="Stop" title="Stop" width="30" />
+                    </a>
+                    <a href="javascript:void(0)" onclick="start();">
+                        <img src ="./img/controls/start.png" alt="Start" title="Start" width="30"  />
+                    </a>
+                    <a href="javascript:void(0)" onclick="previous();">
+                        <img src ="./img/controls/previous.png" alt="Previous" title="Previous" width="30"    />
+                    </a>
+                    <a href="javascript:void(0)" onclick="next();">
+                        <img src ="./img/controls/next.png" alt="Next" title="Next" width="30" />
+                    </a>  
+                </p>
 
-<a href="#" onClick="stop();">Stop</a> ~ 
-<a href="#" onClick="start();">Start</a> ~
-<a href="#" onClick="previous();">Previous</a> ~
-<a href="#" onClick="next();">Next</a> ~
-<label for="elementNumber">Jump To Number </label>
-<input type="text" onChange="updateImage(this.value)" id="elementNumber"/>
-    <div >
-        <ul id="commentSlider" class="jsFader{timer:'1500'}">
-            <li><img src="./img/img1.jpg" alt="image1" title="img1" /></li>
-            <li><img src="./img/img2.jpg" alt="image2" title="img2" /></li>
-            <li><img src="./img/img3.jpg" alt="image3" title="img3" /></li>
-            <li><img src="./img/img4.jpg" alt="image4" title="img4" /></li>
-            <li><img src="./img/img5.jpg" alt="image5" title="img5" /></li>
-        </ul>
-    </div>
+              </div>
+              <div >
+                  <ul id="commentSlider" class="jsFader{timer:'3000'}">
+                      <li>
+                          <a href="./img/img1.jpg" target="_blank">
+                              <img src="./img/img1.jpg" alt="image1" title="img1" />
+                          </a>
+                      </li>
+                      <li>
+                          <a href="./img/img2.jpg" target="_blank">
+                              <img src="./img/img2.jpg" alt="image2" title="img2" />
+                          </a>
+                      </li>                    
+                      <li>
+                          <a href="./img/img3.jpg" target="_blank">
+                              <img src="./img/img3.jpg" alt="image3" title="img3" />
+                          </a>
+                      </li>
 
+                      <li>
+                          <a href="./img/img4.jpg" target="_blank">
+                              <img src="./img/img4.jpg" alt="image4" title="img4" />
+                          </a>
+                      </li>
+                      <li>
+                          <a href="./img/img5.jpg" target="_blank">
+                              <img src="./img/img5.jpg" alt="image5" title="img5" />
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+            </div>
+      </div>
   </body>
 </html> 
