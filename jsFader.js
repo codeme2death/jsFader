@@ -84,9 +84,7 @@ var jsFader = {
                     jsFader.lastFadeTimeRan = new Date().getTime();
                     jsFader.isFadeRunning = true;
                     if(jsFader.fadeOutTime === 0) {
-                        fadeOutTimeOut = jsFader.timeOut / 1000;
-                    } else {
-                        fadeOutTimeOut = jsFader.fadeOutTime;
+                        jsFader.fadeOutTime = jsFader.timeOut / 1000;
                     }
                     pixels = pixels - jsFader.fadeBy;
                     opacityPixels = pixels / 100;
@@ -95,18 +93,13 @@ var jsFader = {
                     if(jsFader.runSetTimer === true) {
                         setTimeout(function(){
                             jsFader.fadeOutAnimation(pixels,element)
-                        },fadeOutTimeOut);                        
+                        },jsFader.fadeOutTime);                        
                         
                     } else {       
                         jsFader.fadeOut = window.requestAnimationFrame(function() {
                             currenTime = new Date().getTime();
-                            difference = currenTime - jsFader.lastTimeRan;
-                            if(jsFader.fadeOutTime === 0) {
-                               fadeOutTimeOut = jsFader.timeOut / 1000;
-                            } else {
-                               fadeOutTimeOut = jsFader.fadeOutTime;
-                            }                           
-                            if(difference >= fadeOutTimeOut) {
+                            difference = currenTime - jsFader.lastTimeRan;                         
+                            if(difference >= jsFader.fadeOutTime) {
                                 jsFader.fadeOutAnimation(pixels,element);
                             }
                         });  
@@ -133,11 +126,8 @@ var jsFader = {
                 element.style.left = "0px";
                 if(pixels <= 100) {
                     if(jsFader.fadeInTime === 0) {
-                        fadeOutTimeOut = jsFader.timeOut / 1000;
-                    } else {
-                        fadeInTimeOut = jsFader.fadeInTime;
-                    }                    
-
+                        jsFader.fadeInTime = jsFader.timeOut / 1000;
+                    }                 
                     pixels = pixels + jsFader.fadeBy;
                     opacityPixels = pixels / 100;
                     element.style.opacity = opacityPixels;
@@ -145,18 +135,13 @@ var jsFader = {
                     if(jsFader.runSetTimer === true) {
                         setTimeout(function(){
                             jsFader.fadeInAnimation(pixels,element);
-                        },fadeInTimeOut);                             
+                        },jsFader.fadeInTime);                             
                         
                     } else {            
                         jsFader.fadeIn = window.requestAnimationFrame(function(fadeInTimeOut) { 
                             currenTime = new Date().getTime();
-                            difference = currenTime - jsFader.lastTimeRan;
-                            if(jsFader.fadeOutTime === 0) {
-                               fadeOutTimeOut = jsFader.timeOut / 1000;
-                            } else {
-                               fadeOutTimeOut = jsFader.fadeInTime;
-                            }                           
-                            if(difference >= fadeOutTimeOut) {
+                            difference = currenTime - jsFader.lastTimeRan;                     
+                            if(difference >= jsFader.fadeInTime) {
                                 jsFader.fadeInAnimation(pixels,element);
                             }                            
                             
