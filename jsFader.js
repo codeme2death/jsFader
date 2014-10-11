@@ -35,7 +35,7 @@ var jsFader = {
         isFadeRunning : false,
         currentFadeOut : 100,
         childElement : 'li',
-        runSetTimer : false,
+        runSetTimer : true,
         changeText : function() {
             if(jsFader.liElements) {
                 var length = jsFader.liElements.length;
@@ -91,9 +91,10 @@ var jsFader = {
                     element.style.opacity = opacityPixels;
                     element.style.filter = 'alpha(opacity=' + pixels + ')'; 
                     if(jsFader.runSetTimer === true) {
-                        setTimeout(function(){
+                        var localFade = function() {
                             jsFader.fadeOutAnimation(pixels,element)
-                        },jsFader.fadeOutTime);                        
+                        };
+                        setTimeout(localFade,jsFader.fadeOutTime);                        
                         
                     } else {       
                         jsFader.fadeOut = window.requestAnimationFrame(function() {
@@ -133,9 +134,10 @@ var jsFader = {
                     element.style.opacity = opacityPixels;
                     element.style.filter = 'alpha(opacity=' + pixels + ')'; 
                     if(jsFader.runSetTimer === true) {
-                        setTimeout(function(){
+                        var localFade = function() {
                             jsFader.fadeInAnimation(pixels,element);
-                        },jsFader.fadeInTime);                             
+                        };                        
+                        setTimeout(localFade,jsFader.fadeInTime);                             
                         
                     } else {            
                         jsFader.fadeIn = window.requestAnimationFrame(function(fadeInTimeOut) { 
@@ -307,7 +309,6 @@ var jsFader = {
         start : function(element,props) {   
             var browser = jsFader.getBrowser();
             var browserVersion = jsFader.getBrowserVersion();
-            alert(browser);
             if(browser.toLowerCase() === 'msie' || browser.toLowerCase() === 'safari') {
                 if(browserVersion < 10 ) {
                     jsFader.runSetTimer = true;
