@@ -163,9 +163,10 @@ var jsFader = {
                     jsFader.checkPosition();
                     if(jsFader.elements[jsFader.counter]) {            
                         jsFader.elements[jsFader.counter].style.top = jsFader.mainContainerHeight;
-                        jsFader.slideUpAnimation(100,jsFader.elements[jsFader.counter]);                
+                        jsFader.slideUpAnimation(jsFader.currentFadeOut,jsFader.elements[jsFader.counter]);                
                     } else {               
-                        jsFader.slideUpAnimation(100,jsFader.elements[0]);
+                        jsFader.elements[0].style.top = jsFader.mainContainerHeight;
+                        jsFader.slideUpAnimation(jsFader.currentFadeOut,jsFader.elements[0]);
                     }
                 }
             }
@@ -377,7 +378,8 @@ var jsFader = {
             var length = jsFader.elements.length;
             if(jsFader.counter >= length) {
                 jsFader.counter = 0;
-            }      
+            }        
+            
             
         },
         stopAnimation : function() {
@@ -664,56 +666,27 @@ var jsFader = {
                     jsFader.fadeIn = false;
 
                     jsFader.checkList();
+                    jsFader.fadeOutAnimation(jsFader.currentFadeOut,jsFader.elements[jsFader.counter]);
+                    jsFader.counter = jsFader.counter + 1;
+                    jsFader.checkPosition();                      
                     switch(jsFader.fadeType) {
-                        case 0:
-                            jsFader.counter = jsFader.counter + 1;
-                            var length = jsFader.elements.length;
-                            if(jsFader.counter >= length) {                    
-                                jsFader.counter = 0;
-                            }
-                            if(jsFader.counter < 0) {
-                                jsFader.counter = length -1;
-                            }                                           
+                        case 0:                                                             
                             jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                     
-                            jsFader.stopAnimation();    
                             break;
-                        case 1:
-                            jsFader.fadeOutAnimation(100,jsFader.elements[jsFader.counter]);    
-                            jsFader.counter = jsFader.counter + 1;
-                            var length = jsFader.elements.length;
-                            if(jsFader.counter >= length) {                    
-                                jsFader.counter = 0;
-                            }
-                            if(jsFader.counter < 0) {
-                                jsFader.counter = length -1;
-                            }                                
-                            jsFader.slideUpAnimation(100,jsFader.elements[jsFader.counter]);  
+                        case 1:                               
+                            jsFader.elements[jsFader.counter].style.top = jsFader.mainContainerHeight;
+                            jsFader.slideUpAnimation(jsFader.currentFadeOut,jsFader.elements[jsFader.counter]);                          
                             break;
                         case 2:
-                            jsFader.slideDownAnimation(0,jsFader.elements[jsFader.counter],jsFader.mainContainerHeight); 
-                            jsFader.counter = jsFader.counter + 1;
-                            var length = jsFader.elements.length;
-                            if(jsFader.counter >= length) {                    
-                                jsFader.counter = 0;
-                            }
-                            if(jsFader.counter < 0) {
-                                jsFader.counter = length -1;
-                            }                                           
-                            jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                                                
+                            offset =  jsFader.mainContainerHeight * -1;
+                            jsFader.elements[jsFader.counter].style.top = offset;                            
+                            jsFader.slideDownAnimation(offset,jsFader.elements[jsFader.counter],jsFader.mainContainerHeight);                                                             
                             break;
-                        case 3:
-                            jsFader.slideRightAnimation(0,jsFader.elements[jsFader.counter],jsFader.mainContainerWidth);   
-                            jsFader.counter = jsFader.counter + 1;
-                            var length = jsFader.elements.length;
-                            if(jsFader.counter >= length) {                    
-                                jsFader.counter = 0;
-                            }
-                            if(jsFader.counter < 0) {
-                                jsFader.counter = length -1;
-                            }                                           
-                            jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                     
-                                                      
-                            break;             
+                        case 3:                          
+                            jsFader.slideRightAnimation(0,jsFader.elements[jsFader.counter],jsFader.mainContainerWidth);                                          
+                            break;  
+                        default :                           
+                            jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                                                   
                     } 
                     jsFader.stopAnimation();  
                     
@@ -731,39 +704,33 @@ var jsFader = {
                     jsFader.fadeIn = false;
 
                     jsFader.checkList();
-                    
+                    jsFader.fadeOutAnimation(jsFader.currentFadeOut,jsFader.elements[jsFader.counter]);
+                    jsFader.counter = jsFader.counter - 1;
+                    jsFader.checkPosition(); 
+                    var length = jsFader.elements.length;
+                    if(jsFader.counter < 0 ) {
+                        jsFader.counter = length - 1;
+                    }
                     switch(jsFader.fadeType) {
-                        case 0: 
-                            jsFader.counter = jsFader.counter - 1;
-                             var length = jsFader.elements.length;
-                             if(jsFader.counter >= length) {                    
-                                 jsFader.counter = 0;
-                             }
-                             if(jsFader.counter < 0) {
-                                 jsFader.counter = length -1;
-                             } 
-                             jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                           
-                        case 1:
-                            jsFader.fadeOutAnimation(100,jsFader.elements[jsFader.counter]);    
-                            jsFader.counter = jsFader.counter - 1;
-                             var length = jsFader.elements.length;
-                             if(jsFader.counter >= length) {                    
-                                 jsFader.counter = 0;
-                             }
-                             if(jsFader.counter < 0) {
-                                 jsFader.counter = length -1;
-                             }                                 
-                            jsFader.slideUpAnimation(100,jsFader.elements[jsFader.counter]);      
+                        case 0:                                                             
+                            jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                     
+                            break;
+                        case 1:                               
+                            jsFader.elements[jsFader.counter].style.top = jsFader.mainContainerHeight;
+                            jsFader.slideUpAnimation(jsFader.currentFadeOut,jsFader.elements[jsFader.counter]);                          
                             break;
                         case 2:
-                            jsFader.slideDownAnimation(0,jsFader.elements[jsFader.counter],jsFader.mainContainerHeight);   
+                            offset =  jsFader.mainContainerHeight * -1;
+                            jsFader.elements[jsFader.counter].style.top = offset;                            
+                            jsFader.slideDownAnimation(offset,jsFader.elements[jsFader.counter],jsFader.mainContainerHeight);                                                             
                             break;
-                        case 3:
-                            jsFader.slideRightAnimation(0,jsFader.elements[jsFader.counter],jsFader.mainContainerWidth);   
-                            break;                    
-                    }   
- 
-                    jsFader.stopAnimation();
+                        case 3:                          
+                            jsFader.slideRightAnimation(0,jsFader.elements[jsFader.counter],jsFader.mainContainerWidth);                                          
+                            break;  
+                        default :                           
+                            jsFader.fadeInAnimation(0,jsFader.elements[jsFader.counter]);                                                   
+                    } 
+                    jsFader.stopAnimation(); 
                                     
                 }
             };             
