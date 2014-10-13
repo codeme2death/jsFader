@@ -1,6 +1,7 @@
 <html>
   <head>
-    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-8"> 
+    <title>JSFader</title>
     <meta content="">
         <script src="./jsFader.js"></script>
         <script>
@@ -23,7 +24,11 @@
             function previous() {
                 el = document.getElementById('commentSlider');
                 el.jsFader.previous();
-            }            
+            } 
+            function setFadeBy(amount) {
+                el = document.getElementById('commentSlider');
+                el.jsFader.setFadeBy(amount);
+            }                
 
         </script>    
         <style>
@@ -35,7 +40,7 @@
                 padding:30px;
                 width:978px;
                 margin:0px auto;
-                min-height:900px;
+                height:900px;
                 background-color: #fff7d1;
                 border:1px solid #000000;
                 border-radius: 10px;
@@ -60,14 +65,15 @@
                 position:relative;
                 height:100px;
                 font-size:26px;
-                height:100px;
+                height:150px;
                 width:200px;
-                float:left
+                float:left;
+                overflow:hidden;
             }
             #commentSlider li {
                 list-style-type: none;
                 opacity:0;
-                visibility:hidden;
+                height:200px;
                 position:absolute;
             }
             #commentSlider2 {
@@ -103,7 +109,9 @@
                         You can also go to a certain number in the list like number 2 or 4. if you don't enter a number it defaults to the first element. 
                         If you mix a number in with characters it only gets the numbers and tries to go to that number.<br /><br />
                         <label for="elementNumber">Jump To Number </label>
-                        <input type="text" onChange="updateImage(this.value)" id="elementNumber"/>
+                        <input type="text" onChange="updateImage(this.value)" id="elementNumber"/><br />
+                        <label for="elementNumber">Fade By</label>
+                        <input type="text" onChange="setFadeBy(this.value)" id="elementNumber"/>                        
                     </p>                  
               </div>
               <div id="controls">
@@ -125,7 +133,7 @@
 
               </div>
               <div >
-                  <ul id="commentSlider" class="jsFader{timer:'3000'}">
+                  <ul id="commentSlider" class="jsFader{timer:'3000',fadeBy : '2', fadeOption :'slide dfg d'}">
                       <li>
                           <a href="./img/img1.jpg" target="_blank">
                               <img src="./img/img1.jpg" alt="image1" title="img1" />
